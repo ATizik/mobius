@@ -60,7 +60,7 @@ public class CompositeLoggerTest {
   @Test
   public void delegatesAfterInitToAllLoggers() {
     AfterInit<String, String> testCase =
-        AfterInit.create("Hello", First.<String, String>first("World"));
+        AfterInit.create("Hello", First.Companion.<String, String>first("World"));
     underTest.afterInit(testCase.model(), testCase.first());
     assertTestCaseLogged(testCase);
   }
@@ -83,7 +83,7 @@ public class CompositeLoggerTest {
   @Test
   public void delegatesAfterUpdateToAllLoggers() {
     AfterUpdate<String, Integer, String> testCase =
-        AfterUpdate.create("Hello", 5, next("World", singleton("test")));
+        AfterUpdate.create("Hello", 5, Companion.next("World", singleton("test")));
     underTest.afterUpdate(testCase.model(), testCase.event(), testCase.next());
     assertTestCaseLogged(testCase);
   }

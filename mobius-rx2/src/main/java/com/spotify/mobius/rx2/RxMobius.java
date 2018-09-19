@@ -19,7 +19,7 @@
  */
 package com.spotify.mobius.rx2;
 
-import static com.spotify.mobius.internal_util.Preconditions.checkNotNull;
+
 
 import com.spotify.mobius.ConnectionException;
 import com.spotify.mobius.Mobius;
@@ -75,7 +75,7 @@ public final class RxMobius {
    */
   public static <M, E, F> MobiusLoop.Builder<M, E, F> loop(
       Update<M, E, F> update, ObservableTransformer<F, E> effectHandler) {
-    return Mobius.loop(update, RxConnectables.fromTransformer(effectHandler));
+    return Mobius.INSTANCE.loop(update, RxConnectables.fromTransformer(effectHandler));
   }
 
   /**

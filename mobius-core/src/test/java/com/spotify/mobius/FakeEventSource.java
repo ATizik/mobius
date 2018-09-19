@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
 
-class FakeEventSource<E> implements EventSource<E> {
+class FakeEventSource<E> extends EventSource<E> {
 
   private final List<Consumer<E>> myConsumers = new ArrayList<>();
 

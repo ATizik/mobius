@@ -19,11 +19,12 @@
  */
 package com.spotify.mobius.test;
 
-import static com.spotify.mobius.internal_util.Preconditions.checkNotNull;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import com.spotify.mobius.First;
 import com.spotify.mobius.Init;
+import com.spotify.mobius.internal_util.PreconditionsKt;
 import org.hamcrest.Matcher;
 
 /**
@@ -37,11 +38,11 @@ public class InitSpec<M, F> {
   private final Init<M, F> init;
 
   public InitSpec(Init<M, F> init) {
-    this.init = checkNotNull(init);
+    this.init = PreconditionsKt.checkNotNull(init);
   }
 
   public Then<M, F> when(M model) {
-    checkNotNull(model);
+    PreconditionsKt.checkNotNull(model);
     return new Then<M, F>() {
       @Override
       public void then(Assert<M, F> assertion) {

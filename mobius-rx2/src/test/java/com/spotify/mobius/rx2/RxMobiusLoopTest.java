@@ -41,12 +41,12 @@ public class RxMobiusLoopTest {
   @Before
   public void setUp() throws Exception {
     MobiusLoop.Factory<String, Integer, Boolean> factory =
-        Mobius.loop(
+        Mobius.INSTANCE.loop(
             new Update<String, Integer, Boolean>() {
               @Nonnull
               @Override
               public Next<String, Boolean> update(String model, Integer event) {
-                return Next.next(model + event.toString());
+                return Next.Companion.next(model + event.toString());
               }
             },
             new Connectable<Boolean, Integer>() {

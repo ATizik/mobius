@@ -37,7 +37,7 @@ public class MergedEventSourceTest {
     TestEventSource<String> s3 = new TestEventSource<>();
     TestEventSource<String> s4 = new TestEventSource<>();
 
-    EventSource<String> mergedSource = MergedEventSource.from(s1, s2, s3, s4);
+    EventSource<String> mergedSource = MergedEventSource.Companion.from(s1, s2, s3, s4);
     RecordingConsumer<String> consumer = new RecordingConsumer<>();
     Disposable disposable = mergedSource.subscribe(consumer);
 
@@ -58,7 +58,7 @@ public class MergedEventSourceTest {
     assertThat(s4.disposed, is(true));
   }
 
-  private static class TestEventSource<T> implements EventSource<T> {
+  private static class TestEventSource<T> extends EventSource<T> {
 
     private Consumer<T> eventConsumer;
     private boolean disposed;

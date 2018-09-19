@@ -75,12 +75,12 @@ public final class MobiusExtras {
   @Nonnull
   public static <M, E> MobiusLoop.Builder<M, E, ?> beginnerLoop(final BiFunction<M, E, M> update) {
     //noinspection unchecked
-    return loop(
+    return INSTANCE.loop(
         new Update<M, E, Object>() {
           @Nonnull
           @Override
           public Next<M, Object> update(M model, E event) {
-            return Next.next(update.apply(model, event));
+            return Next.Companion.next(update.apply(model, event));
           }
         },
         (Connectable<Object, E>) NOOP_CONNECTABLE);

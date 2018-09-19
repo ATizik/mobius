@@ -19,7 +19,7 @@
  */
 package com.spotify.mobius;
 
-import static com.spotify.mobius.Effects.effects;
+
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.awaitility.Awaitility.await;
 
@@ -71,7 +71,7 @@ public class MobiusLoopTest {
           @Nonnull
           @Override
           public First<String, TestEffect> init(String model) {
-            return First.first(model);
+            return First.Companion.first(model);
           }
         };
 
@@ -82,18 +82,18 @@ public class MobiusLoopTest {
           public Next<String, TestEffect> update(String model, TestEvent mobiusEvent) {
 
             if (mobiusEvent instanceof EventWithCrashingEffect) {
-              return Next.next("will crash", effects(new Crash()));
+              return Next.Companion.next("will crash", Next.Companion.effects(new Crash()));
             } else if (mobiusEvent instanceof EventWithSafeEffect) {
               EventWithSafeEffect event = (EventWithSafeEffect) mobiusEvent;
-              return Next.next(
+              return Next.Companion.next(
                   model + "->" + mobiusEvent.toString(), effects(new SafeEffect(event.toString())));
             } else {
-              return Next.next(model + "->" + mobiusEvent.toString());
+              return Next.Companion.next(model + "->" + mobiusEvent.toString());
             }
           }
         };
 
-    mobiusStore = MobiusStore.create(init, update, "init");
+    mobiusStore = MobiusStore.Companion.create(init, update, "init");
 
     effectHandler =
         eventConsumer ->
@@ -229,7 +229,7 @@ public class MobiusLoopTest {
           @Nonnull
           @Override
           public First<String, TestEffect> init(String model) {
-            return First.first(model, effects(new SafeEffect("frominit")));
+            return First.Companion.first(model, effects(new SafeEffect("frominit")));
           }
         };
 
@@ -238,11 +238,11 @@ public class MobiusLoopTest {
           @Nonnull
           @Override
           public Next<String, TestEffect> update(String model, TestEvent event) {
-            return Next.next(model + "->" + event.toString());
+            return Next.Companion.next(model + "->" + event.toString());
           }
         };
 
-    mobiusStore = MobiusStore.create(init, update, "init");
+    mobiusStore = MobiusStore.Companion.create(init, update, "init");
     TestWorkRunner testWorkRunner = new TestWorkRunner();
 
     setupWithEffects(
@@ -272,7 +272,7 @@ public class MobiusLoopTest {
     observer = new RecordingModelObserver<>();
 
     mobiusLoop =
-        MobiusLoop.create(
+        MobiusLoop.Companion.create(
             mobiusStore, effectHandler, eventSource, immediateRunner, immediateRunner);
 
     Disposable unregister = mobiusLoop.observe(observer);
@@ -289,7 +289,7 @@ public class MobiusLoopTest {
     FakeEventSource<TestEvent> eventSource = new FakeEventSource<>();
 
     mobiusLoop =
-        MobiusLoop.create(
+        MobiusLoop.Companion.create(
             mobiusStore, effectHandler, eventSource, immediateRunner, immediateRunner);
 
     observer = new RecordingModelObserver<>(); // to clear out the init from the previous setup
@@ -322,7 +322,7 @@ public class MobiusLoopTest {
 
   @Test
   public void shouldProcessInitBeforeEventsFromEffectHandler() throws Exception {
-    mobiusStore = MobiusStore.create(m -> First.first("I" + m), update, "init");
+    mobiusStore = MobiusStore.Companion.create(m -> First.Companion.first("I" + m), update, "init");
 
     // when an effect handler that emits events before returning the connection
     setupWithEffects(
@@ -350,7 +350,7 @@ public class MobiusLoopTest {
 
   @Test
   public void shouldProcessInitBeforeEventsFromEventSource() throws Exception {
-    mobiusStore = MobiusStore.create(m -> First.first("First" + m), update, "init");
+    mobiusStore = MobiusStore.Companion.create(m -> First.Companion.first("First" + m), update, "init");
 
     eventSource =
         new EventSource<TestEvent>() {
@@ -379,7 +379,7 @@ public class MobiusLoopTest {
     observer = new RecordingModelObserver<>();
 
     mobiusLoop =
-        MobiusLoop.create(mobiusStore, effectHandler, eventSource, immediateRunner, effectRunner);
+        MobiusLoop.Companion.create(mobiusStore, effectHandler, eventSource, immediateRunner, effectRunner);
 
     mobiusLoop.observe(observer);
   }

@@ -73,12 +73,12 @@ public class MobiusLoopControllerTest {
 
     private final MobiusLoopController<String, String, String> underTest =
         new MobiusLoopController<>(
-            Mobius.<String, String, String>loop(
-                    (model, event) -> Next.next(model + event), effectHandler)
-                .eventRunner(WorkRunners::immediate)
-                .effectRunner(WorkRunners::immediate),
+            Mobius.INSTANCE.<String, String, String>loop(
+                    (model, event) -> Next.Companion.next(model + event), effectHandler)
+                .eventRunner(WorkRunners.INSTANCE::immediate)
+                .effectRunner(WorkRunners.INSTANCE::immediate),
             "init",
-            WorkRunners.immediate());
+            WorkRunners.INSTANCE.immediate());
 
     @Test
     public void canCreateView() throws Exception {
@@ -198,12 +198,12 @@ public class MobiusLoopControllerTest {
 
     private final MobiusLoopController<String, String, String> underTest =
         new MobiusLoopController<>(
-            Mobius.<String, String, String>loop(
-                    (model, event) -> Next.next(model + event), effectHandler)
-                .eventRunner(WorkRunners::immediate)
-                .effectRunner(WorkRunners::immediate),
+            Mobius.INSTANCE.<String, String, String>loop(
+                    (model, event) -> Next.Companion.next(model + event), effectHandler)
+                .eventRunner(WorkRunners.INSTANCE::immediate)
+                .effectRunner(WorkRunners.INSTANCE::immediate),
             "init",
-            WorkRunners.immediate());
+            WorkRunners.INSTANCE.immediate());
 
     @Test
     public void canSaveState() throws Exception {
@@ -285,13 +285,13 @@ public class MobiusLoopControllerTest {
 
     private final MobiusLoopController<String, String, String> underTest =
         new MobiusLoopController<>(
-            Mobius.<String, String, String>loop(
-                    (model, event) -> Next.next(model + event), effectHandler)
-                .eventRunner(WorkRunners::immediate)
-                .effectRunner(WorkRunners::immediate)
-                .init(First::first),
+            Mobius.INSTANCE.<String, String, String>loop(
+                    (model, event) -> Next.Companion.next(model + event), effectHandler)
+                .eventRunner(WorkRunners.INSTANCE::immediate)
+                .effectRunner(WorkRunners.INSTANCE::immediate)
+                .init(First.Companion::first),
             "init",
-            WorkRunners.immediate());
+            WorkRunners.INSTANCE.immediate());
 
     @Test
     public void startsFromDefaultModel() throws Exception {
@@ -345,13 +345,13 @@ public class MobiusLoopControllerTest {
   public static class Connect {
     private final MobiusLoopController<String, String, String> underTest =
         new MobiusLoopController<>(
-            Mobius.<String, String, String>loop(
-                    (model, event) -> Next.next(model + event), effectHandler)
-                .eventRunner(WorkRunners::immediate)
-                .effectRunner(WorkRunners::immediate)
-                .init(First::first),
+            Mobius.INSTANCE.<String, String, String>loop(
+                    (model, event) -> Next.Companion.next(model + event), effectHandler)
+                .eventRunner(WorkRunners.INSTANCE::immediate)
+                .effectRunner(WorkRunners.INSTANCE::immediate)
+                .init(First.Companion::first),
             "init",
-            WorkRunners.immediate());
+            WorkRunners.INSTANCE.immediate());
 
     @Test
     public void modelHandlerMustReturnConsumer() throws Exception {
@@ -421,10 +421,10 @@ public class MobiusLoopControllerTest {
     private MobiusLoopController<String, String, String> createWithWorkRunner(
         WorkRunner mainThreadRunner) {
       return new MobiusLoopController<>(
-          Mobius.<String, String, String>loop(
-                  (model, event) -> Next.next(model + event), effectHandler)
-              .eventRunner(WorkRunners::immediate)
-              .effectRunner(WorkRunners::immediate),
+          Mobius.INSTANCE.<String, String, String>loop(
+                  (model, event) -> Next.Companion.next(model + event), effectHandler)
+              .eventRunner(WorkRunners.INSTANCE::immediate)
+              .effectRunner(WorkRunners.INSTANCE::immediate),
           "init",
           mainThreadRunner);
     }

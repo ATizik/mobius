@@ -102,12 +102,12 @@ public class EventProcessorTest {
   }
 
   private MobiusStore<String, Integer, Long> createStore() {
-    return MobiusStore.create(
+    return MobiusStore.Companion.create(
         new Init<String, Long>() {
           @Nonnull
           @Override
           public First<String, Long> init(String model) {
-            return First.first(model + "!", ImmutableUtil.setOf(15L, 25L, 35L));
+            return First.Companion.first(model + "!", ImmutableUtil.INSTANCE.setOf(15L, 25L, 35L));
           }
         },
         new Update<String, Integer, Long>() {
@@ -115,7 +115,7 @@ public class EventProcessorTest {
           @Override
           public Next<String, Long> update(String model, Integer event) {
             if (event == 0) {
-              return Next.noChange();
+              return Next.Companion.noChange();
             }
 
             Set<Long> effects = Sets.newHashSet();
@@ -123,7 +123,7 @@ public class EventProcessorTest {
               effects.add(10L * (i + 1));
             }
 
-            return Next.next(model + "->" + event, effects);
+            return Next.Companion.next(model + "->" + event, effects);
           }
         },
         "init");

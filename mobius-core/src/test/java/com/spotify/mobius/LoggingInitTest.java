@@ -40,7 +40,7 @@ public class LoggingInitTest {
           @Nonnull
           @Override
           public First<String, Integer> init(String model) {
-            return First.first(model);
+            return First.Companion.first(model);
           }
         };
     logger = new CapturingLogger<>();
@@ -64,7 +64,7 @@ public class LoggingInitTest {
         logger.afterInit,
         contains(
             CapturingLogger.AfterInitArgs.create(
-                "tha modell", First.<String, Integer>first("tha modell"))));
+                "tha modell", First.Companion.<String, Integer>first("tha modell"))));
   }
 
   @Test

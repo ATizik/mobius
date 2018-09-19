@@ -76,7 +76,7 @@ public final class RxMobius {
    */
   public static <M, E, F> MobiusLoop.Builder<M, E, F> loop(
       Update<M, E, F> update, Transformer<F, E> effectHandler) {
-    return Mobius.loop(update, RxConnectables.fromTransformer(effectHandler));
+    return Mobius.INSTANCE.loop(update, RxConnectables.fromTransformer(effectHandler));
   }
 
   /**

@@ -45,7 +45,7 @@ public class NextTest {
     Set<String> inputs = new HashSet<>();
     inputs.add("in");
 
-    Next<String, String> next = Next.next("#", inputs);
+    Next<String, String> next = Next.Companion.next("#", inputs);
 
     inputs.add("don't want to see this one");
 
@@ -54,15 +54,15 @@ public class NextTest {
 
   @Test
   public void shouldNotCareAboutEffectOrder() throws Exception {
-    Next<String, String> original = Next.next("model", effects("e1", "e2"));
-    Next<String, String> reordered = Next.next("model", effects("e2", "e1"));
+    Next<String, String> original = Next.Companion.next("model", effects("e1", "e2"));
+    Next<String, String> reordered = Next.Companion.next("model", effects("e2", "e1"));
 
     assertThat(reordered, equalTo(original));
   }
 
   @Test
   public void nextNoopHasNoModelAndNoEffects() throws Exception {
-    Next<String, String> next = noChange();
+    Next<String, String> next = Companion.noChange();
 
     assertFalse(next.hasModel());
     assertFalse(next.hasEffects());
@@ -70,7 +70,7 @@ public class NextTest {
 
   @Test
   public void nextEffectsOnlyHasEffects() throws Exception {
-    Next<String, String> next = dispatch(effects("foo"));
+    Next<String, String> next = Companion.dispatch(effects("foo"));
 
     assertFalse(next.hasModel());
     assertTrue(next.hasEffects());
@@ -78,7 +78,7 @@ public class NextTest {
 
   @Test
   public void nextNoEffectsOnlyHasModel() throws Exception {
-    Next<String, String> next = Next.next("foo");
+    Next<String, String> next = Next.Companion.next("foo");
 
     assertTrue(next.hasModel());
     assertFalse(next.hasEffects());
@@ -86,7 +86,7 @@ public class NextTest {
 
   @Test
   public void nextModelAndEffectsHasBothModelAndEffects() throws Exception {
-    Next<String, String> next = Next.next("m", effects("f"));
+    Next<String, String> next = Next.Companion.next("m", effects("f"));
 
     assertTrue(next.hasModel());
     assertTrue(next.hasEffects());
@@ -94,65 +94,65 @@ public class NextTest {
 
   @Test
   public void andEffectsFactoriesAreEquivalent() throws Exception {
-    Next<?, String> a = Next.next("m", effects("f1", "f2", "f3"));
-    Next<?, String> b = Next.next("m", setOf("f1", "f2", "f3"));
+    Next<?, String> a = Next.Companion.next("m", effects("f1", "f2", "f3"));
+    Next<?, String> b = Next.Companion.next("m", setOf("f1", "f2", "f3"));
 
     assertEquals(a, b);
   }
 
   @Test
   public void canMergeInnerEffects() throws Exception {
-    Next<String, String> outerNext = Next.next("m", effects("f1", "f2"));
-    Next<?, String> innerNext = dispatch(effects("f2", "f3"));
+    Next<String, String> outerNext = Next.Companion.next("m", effects("f1", "f2"));
+    Next<?, String> innerNext = Companion.dispatch(effects("f2", "f3"));
 
     Next<String, String> merged =
-        Next.next(
+        Next.Companion.next(
             outerNext.modelOrElse("fail"), unionSets(innerNext.effects(), outerNext.effects()));
 
-    assertEquals(Next.next("m", effects("f1", "f2", "f3")), merged);
+    assertEquals(Next.Companion.next("m", effects("f1", "f2", "f3")), merged);
   }
 
   @Test
   public void canMergeInnerEffectsAndModel() throws Exception {
     Set<String> effects = setOf("f1", "f2");
-    Next<Integer, String> innerNext = Next.next(1, effects("f2", "f3"));
+    Next<Integer, String> innerNext = Next.Companion.next(1, effects("f2", "f3"));
 
     Next<String, String> merged =
-        Next.next("m" + innerNext.modelOrElse(0), unionSets(effects, innerNext.effects()));
+        Next.Companion.next("m" + innerNext.modelOrElse(0), unionSets(effects, innerNext.effects()));
 
-    assertEquals(Next.next("m1", effects("f1", "f2", "f3")), merged);
+    assertEquals(Next.Companion.next("m1", effects("f1", "f2", "f3")), merged);
   }
 
   @Test
   public void testEquals() throws Exception {
-    Next<String, String> m1 = new AutoValue_Next<>("hi", ImmutableUtil.<String>emptySet());
-    Next<String, String> m2 = Next.next("hi");
-    Next<String, String> m3 = Next.next("hi", ImmutableUtil.<String>emptySet());
+    Next<String, String> m1 = new AutoValue_Next<>("hi", ImmutableUtil.INSTANCE.<String>emptySet());
+    Next<String, String> m2 = Next.Companion.next("hi");
+    Next<String, String> m3 = Next.Companion.next("hi", ImmutableUtil.INSTANCE.<String>emptySet());
 
-    Next<String, String> n1 = new AutoValue_Next<>("hi", ImmutableUtil.setOf("a", "b"));
-    Next<String, String> n2 = Next.next("hi", effects("a", "b"));
-    Next<String, String> n3 = Next.next("hi", effects("b", "a"));
-    Next<String, String> n4 = Next.next("hi", ImmutableUtil.setOf("b", "a"));
+    Next<String, String> n1 = new AutoValue_Next<>("hi", ImmutableUtil.INSTANCE.setOf("a", "b"));
+    Next<String, String> n2 = Next.Companion.next("hi", effects("a", "b"));
+    Next<String, String> n3 = Next.Companion.next("hi", effects("b", "a"));
+    Next<String, String> n4 = Next.Companion.next("hi", ImmutableUtil.INSTANCE.setOf("b", "a"));
 
-    Next<String, String> o1 = new AutoValue_Next<>("hi", ImmutableUtil.setOf("a", "b", "c"));
-    Next<String, String> o2 = Next.next("hi", effects("a", "c", "b"));
-    Next<String, String> o3 = Next.next("hi", effects("b", "a", "c"));
-    Next<String, String> o4 = Next.next("hi", ImmutableUtil.setOf("c", "b", "a"));
+    Next<String, String> o1 = new AutoValue_Next<>("hi", ImmutableUtil.INSTANCE.setOf("a", "b", "c"));
+    Next<String, String> o2 = Next.Companion.next("hi", effects("a", "c", "b"));
+    Next<String, String> o3 = Next.Companion.next("hi", effects("b", "a", "c"));
+    Next<String, String> o4 = Next.Companion.next("hi", ImmutableUtil.INSTANCE.setOf("c", "b", "a"));
 
-    Next<String, String> p1 = new AutoValue_Next<>(null, ImmutableUtil.setOf("a", "b", "c"));
-    Next<String, String> p2 = Next.dispatch(effects("a", "c", "b"));
-    Next<String, String> p3 = Next.dispatch(effects("b", "a", "c"));
-    Next<String, String> p4 = Next.dispatch(ImmutableUtil.setOf("c", "b", "a"));
+    Next<String, String> p1 = new AutoValue_Next<>(null, ImmutableUtil.INSTANCE.setOf("a", "b", "c"));
+    Next<String, String> p2 = Next.Companion.dispatch(effects("a", "c", "b"));
+    Next<String, String> p3 = Next.Companion.dispatch(effects("b", "a", "c"));
+    Next<String, String> p4 = Next.Companion.dispatch(ImmutableUtil.INSTANCE.setOf("c", "b", "a"));
 
-    Next<String, String> q1 = new AutoValue_Next<>("hey", ImmutableUtil.<String>setOf());
-    Next<String, String> q2 = Next.next("hey");
-    Next<String, String> q3 = Next.next("hey", Collections.<String>emptySet());
+    Next<String, String> q1 = new AutoValue_Next<>("hey", ImmutableUtil.INSTANCE.<String>setOf());
+    Next<String, String> q2 = Next.Companion.next("hey");
+    Next<String, String> q3 = Next.Companion.next("hey", Collections.<String>emptySet());
 
-    Next<String, String> r1 = new AutoValue_Next<>("hey", ImmutableUtil.setOf("a", "b"));
-    Next<String, String> r2 = Next.next("hey", effects("a", "b"));
+    Next<String, String> r1 = new AutoValue_Next<>("hey", ImmutableUtil.INSTANCE.setOf("a", "b"));
+    Next<String, String> r2 = Next.Companion.next("hey", effects("a", "b"));
 
-    Next<String, String> s1 = new AutoValue_Next<>("hey", ImmutableUtil.setOf("a", "b", "c"));
-    Next<String, String> s2 = Next.next("hey", effects("a", "b", "c"));
+    Next<String, String> s1 = new AutoValue_Next<>("hey", ImmutableUtil.INSTANCE.setOf("a", "b", "c"));
+    Next<String, String> s2 = Next.Companion.next("hey", effects("a", "b", "c"));
 
     new EqualsTester()
         .addEqualityGroup(m1, m2, m3)
@@ -172,24 +172,24 @@ public class NextTest {
   // Should compile
   @SuppressWarnings("unused")
   private Next<?, Number> canInferFromVarargOnlyEffects() {
-    return dispatch(effects((short) 1, 2, (long) 3));
+    return Companion.dispatch(effects((short) 1, 2, (long) 3));
   }
 
   // Should compile
   @SuppressWarnings("unused")
   private Next<?, Number> canInferFromVarargOnlyEffectsSingle() {
-    return dispatch(effects((short) 1));
+    return Companion.dispatch(effects((short) 1));
   }
 
   // Should compile
   @SuppressWarnings("unused")
   private Next<?, Number> canInferFromVarargAndEffects() {
-    return Next.next("m", effects((short) 1, 2, (long) 3));
+    return Next.Companion.next("m", effects((short) 1, 2, (long) 3));
   }
 
   // Should compile
   @SuppressWarnings("unused")
   private Next<?, Number> canInferFromVarargAndEffectsSingle() {
-    return Next.next("m", effects((short) 1));
+    return Next.Companion.next("m", effects((short) 1));
   }
 }

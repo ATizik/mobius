@@ -19,7 +19,7 @@
  */
 package com.spotify.mobius.test;
 
-import static com.spotify.mobius.Effects.effects;
+
 import static com.spotify.mobius.test.NextMatchers.hasEffects;
 import static com.spotify.mobius.test.NextMatchers.hasModel;
 import static com.spotify.mobius.test.NextMatchers.hasNothing;
@@ -39,9 +39,9 @@ public class UpdateSpecTest {
   private static final Update<String, String, Integer> UPDATE =
       (model, event) -> {
         if (!"HELLO".equals(model)) {
-          return Next.noChange();
+          return Next.Companion.noChange();
         }
-        return Next.next(model.toUpperCase(), effects(1, 2));
+        return Next.Companion.next(model.toUpperCase(), Next.Companion.effects(1, 2));
       };
   private static final UpdateSpec<String, String, Integer> CRASH_SPEC =
       new UpdateSpec<>(
@@ -50,7 +50,7 @@ public class UpdateSpecTest {
               throw new RuntimeException("expected");
             }
 
-            return Next.next(model + "-" + event);
+            return Next.Companion.next(model + "-" + event);
           });
 
   private UpdateSpec<String, String, Integer> updateSpec;
@@ -85,8 +85,8 @@ public class UpdateSpecTest {
     updateSpec =
         new UpdateSpec<>(
             (model, event) ->
-                Next.next(
-                    model + " - " + event, event.equals("three") ? effects(8, 7, 4) : effects()));
+                Next.Companion.next(
+                    model + " - " + event, event.equals("three") ? Next.Companion.effects(8, 7, 4) : Next.Companion.effects()));
 
     updateSpec
         .given("init")
@@ -109,7 +109,7 @@ public class UpdateSpecTest {
 
   @Test
   public void shouldFailAsExpectedForMultipleEventsLast() throws Exception {
-    updateSpec = new UpdateSpec<>((model, event) -> Next.next(model + " - " + event));
+    updateSpec = new UpdateSpec<>((model, event) -> Next.Companion.next(model + " - " + event));
 
     assertThatThrownBy(
             () ->

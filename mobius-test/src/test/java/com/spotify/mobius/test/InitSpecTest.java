@@ -19,7 +19,7 @@
  */
 package com.spotify.mobius.test;
 
-import static com.spotify.mobius.Effects.effects;
+
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -28,6 +28,7 @@ import static org.hamcrest.Matchers.is;
 
 import com.spotify.mobius.First;
 import com.spotify.mobius.Init;
+import com.spotify.mobius.Next;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,7 +38,7 @@ public class InitSpecTest {
         if ("bad model".equals(model)) {
           throw new IllegalStateException("Bad Bad Model!");
         }
-        return First.first(model.concat(model), effects(1, 2, 3));
+        return First.Companion.first(model.concat(model), Next.Companion.effects(1, 2, 3));
       };
 
   private InitSpec<String, Integer> initSpec;

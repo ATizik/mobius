@@ -35,7 +35,7 @@ public class FirstTest {
 
   @Test
   public void supportsCreatingWithVarargs() throws Exception {
-    First<String, String> f = First.first("hi", effects("effect", "äffäkt"));
+    First<String, String> f = First.Companion.first("hi", effects("effect", "äffäkt"));
 
     assertThat(f.model(), is("hi"));
     assertTrue(f.hasEffects());
@@ -44,7 +44,7 @@ public class FirstTest {
 
   @Test
   public void supportsCreatingWithSet() throws Exception {
-    First<String, String> f = First.first("hi", ImmutableSet.of("ho", "there"));
+    First<String, String> f = First.Companion.first("hi", ImmutableSet.of("ho", "there"));
 
     assertTrue(f.hasEffects());
     assertThat(f.effects(), contains("ho", "there"));
@@ -52,7 +52,7 @@ public class FirstTest {
 
   @Test
   public void reportsNoEffectsIfThereAreNoEffects() throws Exception {
-    First<String, String> f = First.first("hi");
+    First<String, String> f = First.Companion.first("hi");
 
     assertFalse(f.hasEffects());
   }
@@ -60,24 +60,24 @@ public class FirstTest {
   @Test
   public void shouldHaveCorrectEqualsWithEffects() throws Exception {
     First<String, String> av1 = new AutoValue_First<>("hi", ImmutableSet.of("hello", "there"));
-    First<String, String> f1 = First.first("hi", effects("hello", "there"));
-    First<String, String> f2 = First.first("hi", effects("there", "hello"));
-    First<String, String> f3 = First.first("hi", ImmutableSet.of("hello", "there"));
+    First<String, String> f1 = First.Companion.first("hi", effects("hello", "there"));
+    First<String, String> f2 = First.Companion.first("hi", effects("there", "hello"));
+    First<String, String> f3 = First.Companion.first("hi", ImmutableSet.of("hello", "there"));
 
     First<String, String> av2 =
         new AutoValue_First<>("hi", ImmutableSet.of("hello", "there", "you"));
-    First<String, String> g1 = First.first("hi", effects("hello", "there", "you"));
-    First<String, String> g2 = First.first("hi", ImmutableSet.of("hello", "there", "you"));
+    First<String, String> g1 = First.Companion.first("hi", effects("hello", "there", "you"));
+    First<String, String> g2 = First.Companion.first("hi", ImmutableSet.of("hello", "there", "you"));
 
     First<String, String> av3 = new AutoValue_First<>("hi", ImmutableSet.<String>of());
-    First<String, String> h1 = First.first("hi");
-    First<String, String> h2 = First.first("hi", ImmutableSet.<String>of());
-    First<String, String> h3 = First.first("hi", effects());
+    First<String, String> h1 = First.Companion.first("hi");
+    First<String, String> h2 = First.Companion.first("hi", ImmutableSet.<String>of());
+    First<String, String> h3 = First.Companion.first("hi", effects());
 
-    First<String, String> i1 = First.first("hey", effects("hello", "there"));
-    First<String, String> j1 = First.first("hey", effects("hello", "there", "you"));
-    First<String, String> k1 = First.first("hey");
-    First<String, String> k2 = First.first("hey", effects());
+    First<String, String> i1 = First.Companion.first("hey", effects("hello", "there"));
+    First<String, String> j1 = First.Companion.first("hey", effects("hello", "there", "you"));
+    First<String, String> k1 = First.Companion.first("hey");
+    First<String, String> k2 = First.Companion.first("hey", effects());
 
     new EqualsTester()
         .addEqualityGroup(av1, f1, f2, f3)
@@ -96,12 +96,12 @@ public class FirstTest {
   // Should compile
   @SuppressWarnings("unused")
   private First<?, Number> canInferFromVarargOnlyEffects() {
-    return First.first("s", effects((short) 1, 2, (long) 3));
+    return First.Companion.first("s", effects((short) 1, 2, (long) 3));
   }
 
   // Should compile
   @SuppressWarnings("unused")
   private First<?, Number> canInferFromVarargOnlyEffectsSingle() {
-    return First.first("s", effects((short) 1));
+    return First.Companion.first("s", effects((short) 1));
   }
 }

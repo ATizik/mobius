@@ -42,7 +42,7 @@ public class InnerEffectHandlers {
       @Nonnull
       @Override
       public Next<M, F> handleInnerEffects(M model, boolean modelUpdated, Set<FI> innerEffects) {
-        return modelUpdated ? Next.<M, F>next(model) : Next.<M, F>noChange();
+        return modelUpdated ? Next.Companion.<M, F>next(model) : Next.Companion.<M, F>noChange();
       }
     };
   }
@@ -62,7 +62,7 @@ public class InnerEffectHandlers {
       @Override
       public Next<M, F> handleInnerEffects(M model, boolean modelUpdated, Set<FI> innerEffects) {
         if (innerEffects.isEmpty()) {
-          return modelUpdated ? Next.<M, F>next(model) : Next.<M, F>noChange();
+          return modelUpdated ? Next.Companion.<M, F>next(model) : Next.Companion.<M, F>noChange();
         }
 
         Set<F> effects = new HashSet<>();
@@ -72,9 +72,9 @@ public class InnerEffectHandlers {
         }
 
         if (modelUpdated) {
-          return Next.next(model, effects);
+          return Next.Companion.next(model, effects);
         } else {
-          return Next.dispatch(effects);
+          return Next.Companion.dispatch(effects);
         }
       }
     };

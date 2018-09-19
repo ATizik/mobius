@@ -2,6 +2,7 @@ import com.github.sherter.googlejavaformatgradleplugin.GoogleJavaFormat
 import com.github.sherter.googlejavaformatgradleplugin.VerifyGoogleJavaFormat
 
 buildscript {
+    ext.kotlin_version = '1.2.70'
     repositories {
         jcenter()
         google()
@@ -13,6 +14,7 @@ buildscript {
         classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.5.2"
         classpath('com.android.tools.build:gradle:3.0.1')
         classpath 'net.researchgate:gradle-release:2.6.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
@@ -27,6 +29,7 @@ repositories {
 }
 
 apply plugin: 'net.researchgate.release'
+apply plugin: 'kotlin'
 
 static def isAndroidProject(Project p) {
     return p.plugins.findPlugin('com.android.library')
@@ -89,7 +92,7 @@ task format(type: GoogleJavaFormat) {
 task verifyFormat(type: VerifyGoogleJavaFormat) {
     exclude '**/package-info.java'
 }
-task build(dependsOn: getTasksByName('build', true))
+//task build(dependsOn: getTasksByName('build', true))
 task uploadArchivesAggregate(dependsOn: getTasksByName('uploadArchives', true))
 
 release {
@@ -118,4 +121,17 @@ allprojects {
 
 nexusStaging {
     packageGroup = "com.spotify"
+}
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }

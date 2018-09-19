@@ -19,10 +19,7 @@
  */
 package com.spotify.mobius.test;
 
-import static com.spotify.mobius.Effects.effects;
-import static com.spotify.mobius.Next.dispatch;
-import static com.spotify.mobius.Next.next;
-import static com.spotify.mobius.Next.noChange;
+
 import static com.spotify.mobius.test.NextMatchers.hasEffects;
 import static com.spotify.mobius.test.NextMatchers.hasModel;
 import static com.spotify.mobius.test.NextMatchers.hasNoEffects;
@@ -58,18 +55,18 @@ public class NextMatchersTest {
 
     assertFalse(matcher.matches(null));
 
-    assertFalse(matcher.matches(next("1234")));
+    assertFalse(matcher.matches(Next.Companion.next("1234")));
 
-    assertFalse(matcher.matches(dispatch(effects("f1"))));
+    assertFalse(matcher.matches(Next.Companion.dispatch(Next.Companion.effects("f1"))));
 
-    assertFalse(matcher.matches(next("123", effects("f1"))));
+    assertFalse(matcher.matches(Next.Companion.next("123", Next.Companion.effects("f1"))));
 
-    assertTrue(matcher.matches(noChange()));
+    assertTrue(matcher.matches(Next.Companion.noChange()));
   }
 
   @Test
   public void testHasModel() throws Exception {
-    next = next("a");
+    next = Next.Companion.next("a");
     matcher = hasModel();
 
     assertTrue(matcher.matches(next));
@@ -81,7 +78,7 @@ public class NextMatchersTest {
 
   @Test
   public void testHasModelFail() throws Exception {
-    next = noChange();
+    next = Next.Companion.noChange();
     matcher = hasModel();
 
     assertFalse(matcher.matches(next));
@@ -93,7 +90,7 @@ public class NextMatchersTest {
 
   @Test
   public void testHasNoModel() throws Exception {
-    next = dispatch(effects(1, 2));
+    next = Next.Companion.dispatch(Next.Companion.effects(1, 2));
     matcher = hasNoModel();
 
     assertTrue(matcher.matches(next));
@@ -105,7 +102,7 @@ public class NextMatchersTest {
 
   @Test
   public void testHasNoModelMismatch() throws Exception {
-    next = next("a");
+    next = Next.Companion.next("a");
     matcher = hasNoModel();
 
     assertFalse(matcher.matches(next));
@@ -117,7 +114,7 @@ public class NextMatchersTest {
 
   @Test
   public void testHasModelSpecific() throws Exception {
-    next = next("a");
+    next = Next.Companion.next("a");
     matcher = hasModel(equalTo("a"));
 
     assertTrue(matcher.matches(next));
@@ -129,7 +126,7 @@ public class NextMatchersTest {
 
   @Test
   public void testHasModelWithValue() throws Exception {
-    next = next("a");
+    next = Next.Companion.next("a");
     matcher = hasModel("a");
 
     assertTrue(matcher.matches(next));
@@ -141,7 +138,7 @@ public class NextMatchersTest {
 
   @Test
   public void testHasModelSpecificButWrong() throws Exception {
-    next = next("b");
+    next = Next.Companion.next("b");
     matcher = hasModel(equalTo("a"));
 
     assertFalse(matcher.matches(next));
@@ -153,7 +150,7 @@ public class NextMatchersTest {
 
   @Test
   public void testHasModelSpecificButMissing() throws Exception {
-    next = noChange();
+    next = Next.Companion.noChange();
     matcher = hasModel(equalTo("a"));
 
     assertFalse(matcher.matches(next));
@@ -165,7 +162,7 @@ public class NextMatchersTest {
 
   @Test
   public void testHasNoEffectsMatch() throws Exception {
-    next = noChange();
+    next = Next.Companion.noChange();
     matcher = hasNoEffects();
 
     assertTrue(matcher.matches(next));
@@ -177,7 +174,7 @@ public class NextMatchersTest {
 
   @Test
   public void testHasNoEffectsMismatch() throws Exception {
-    next = dispatch(effects(1, 2, 3));
+    next = Next.Companion.dispatch(Next.Companion.effects(1, 2, 3));
     matcher = hasNoEffects();
 
     assertFalse(matcher.matches(next));
@@ -189,7 +186,7 @@ public class NextMatchersTest {
 
   @Test
   public void testHasEffectsSpecific() throws Exception {
-    next = dispatch(effects(1, 3, 2));
+    next = Next.Companion.dispatch(Next.Companion.effects(1, 3, 2));
     matcher = hasEffects(hasItems(1, 2, 3));
 
     assertTrue(matcher.matches(next));
@@ -201,7 +198,7 @@ public class NextMatchersTest {
 
   @Test
   public void testHasEffectsSpecificButWrong() throws Exception {
-    next = dispatch(effects(1));
+    next = Next.Companion.dispatch(Next.Companion.effects(1));
     matcher = hasEffects(hasItems(2));
 
     assertFalse(matcher.matches(next));
@@ -213,7 +210,7 @@ public class NextMatchersTest {
 
   @Test
   public void testHasEffectsSpecificButMissing() throws Exception {
-    next = noChange();
+    next = Next.Companion.noChange();
     matcher = hasEffects(hasItems(1, 2, 3));
 
     assertFalse(matcher.matches(next));
@@ -225,7 +222,7 @@ public class NextMatchersTest {
 
   @Test
   public void testHasEffectsWithConcreteInstancesMatch() throws Exception {
-    next = dispatch(effects(94));
+    next = Next.Companion.dispatch(Next.Companion.effects(94));
 
     matcher = hasEffects(94);
 
@@ -234,7 +231,7 @@ public class NextMatchersTest {
 
   @Test
   public void testHasEffectsWithConcreteInstancesMismatch() throws Exception {
-    next = dispatch(effects(94));
+    next = Next.Companion.dispatch(Next.Companion.effects(94));
 
     matcher = hasEffects(74);
 
@@ -243,7 +240,7 @@ public class NextMatchersTest {
 
   @Test
   public void testHasEffectsWithConcreteInstancesPartialMatch() throws Exception {
-    next = dispatch(effects(94, 74));
+    next = Next.Companion.dispatch(Next.Companion.effects(94, 74));
 
     matcher = hasEffects(94);
 
@@ -252,7 +249,7 @@ public class NextMatchersTest {
 
   @Test
   public void testHasEffectsWithConcreteInstancesOutOfOrder() throws Exception {
-    next = dispatch(effects(94, 74, 65));
+    next = Next.Companion.dispatch(Next.Companion.effects(94, 74, 65));
 
     matcher = hasEffects(65, 94, 74);
 

@@ -44,7 +44,7 @@ public class LoggingUpdateTest {
               @Nonnull
               @Override
               public Next<String, Boolean> update(String model, Integer event) {
-                return Next.next(model + "-", effects(event % 2 == 0));
+                return Next.Companion.next(model + "-", effects(event % 2 == 0));
               }
             },
             logger);
@@ -66,7 +66,7 @@ public class LoggingUpdateTest {
         logger.afterUpdate,
         contains(
             CapturingLogger.AfterUpdateArgs.create(
-                "mah model", 1, Next.next("mah model-", effects(false)))));
+                "mah model", 1, Next.Companion.next("mah model-", effects(false)))));
   }
 
   @Test

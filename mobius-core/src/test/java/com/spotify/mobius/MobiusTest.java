@@ -48,7 +48,7 @@ public class MobiusTest {
         @Nonnull
         @Override
         public Next<String, Boolean> update(String model, Integer event) {
-          return Next.next(model + String.valueOf(event), effects((Boolean) (event % 2 == 0)));
+          return Next.Companion.next(model + String.valueOf(event), effects((Boolean) (event % 2 == 0)));
         }
       };
 
@@ -72,7 +72,7 @@ public class MobiusTest {
 
   @Test
   public void shouldInstantiateWithMinimumParams() throws Exception {
-    loop = Mobius.loop(UPDATE, HANDLER).startFrom(MY_MODEL);
+    loop = Mobius.INSTANCE.loop(UPDATE, HANDLER).startFrom(MY_MODEL);
 
     loop.dispatchEvent(8);
 
@@ -86,11 +86,11 @@ public class MobiusTest {
           @Nonnull
           @Override
           public First<String, Boolean> init(String model) {
-            return First.first(model, effects(true));
+            return First.Companion.first(model, effects(true));
           }
         };
 
-    loop = Mobius.loop(UPDATE, HANDLER).init(init).startFrom(MY_MODEL);
+    loop = Mobius.INSTANCE.loop(UPDATE, HANDLER).init(init).startFrom(MY_MODEL);
 
     loop.dispatchEvent(3);
 
@@ -100,7 +100,7 @@ public class MobiusTest {
   @Test
   public void shouldPermitUsingCustomEffectRunner() throws Exception {
     TestableWorkRunner runner = new TestableWorkRunner();
-    loop = Mobius.loop(UPDATE, HANDLER).effectRunner(() -> runner).startFrom(MY_MODEL);
+    loop = Mobius.INSTANCE.loop(UPDATE, HANDLER).effectRunner(() -> runner).startFrom(MY_MODEL);
 
     loop.dispatchEvent(3);
 
@@ -110,7 +110,7 @@ public class MobiusTest {
   @Test
   public void shouldPermitUsingCustomEventRunner() throws Exception {
     TestableWorkRunner runner = new TestableWorkRunner();
-    loop = Mobius.loop(UPDATE, HANDLER).eventRunner(() -> runner).startFrom(MY_MODEL);
+    loop = Mobius.INSTANCE.loop(UPDATE, HANDLER).eventRunner(() -> runner).startFrom(MY_MODEL);
 
     loop.dispatchEvent(3);
 
@@ -122,7 +122,7 @@ public class MobiusTest {
   public void shouldPermitUsingEventSource() throws Exception {
     TestEventSource eventSource = new TestEventSource();
 
-    loop = Mobius.loop(UPDATE, HANDLER).eventSource(eventSource).startFrom(MY_MODEL);
+    loop = Mobius.INSTANCE.loop(UPDATE, HANDLER).eventSource(eventSource).startFrom(MY_MODEL);
 
     eventSource.consumer.accept(7);
 
@@ -134,7 +134,7 @@ public class MobiusTest {
     TestLogger logger = new TestLogger();
 
     loop =
-        Mobius.loop(UPDATE, HANDLER)
+        Mobius.INSTANCE.loop(UPDATE, HANDLER)
             .logger(logger)
             .eventRunner(ImmediateWorkRunner::new)
             .effectRunner(ImmediateWorkRunner::new)
@@ -153,7 +153,7 @@ public class MobiusTest {
 
   @Test
   public void shouldSupportCreatingFactory() throws Exception {
-    MobiusLoop.Factory<String, Integer, Boolean> factory = Mobius.loop(UPDATE, HANDLER);
+    MobiusLoop.Factory<String, Integer, Boolean> factory = Mobius.INSTANCE.loop(UPDATE, HANDLER);
 
     loop = factory.startFrom("resume");
 
@@ -164,7 +164,7 @@ public class MobiusTest {
 
   @Test
   public void shouldSupportCreatingMultipleLoops() throws Exception {
-    MobiusLoop.Factory<String, Integer, Boolean> factory = Mobius.loop(UPDATE, HANDLER);
+    MobiusLoop.Factory<String, Integer, Boolean> factory = Mobius.INSTANCE.loop(UPDATE, HANDLER);
 
     // one
     loop = factory.startFrom("first");
@@ -198,7 +198,7 @@ public class MobiusTest {
     public void dispose() {}
   }
 
-  private static class TestEventSource implements EventSource<Integer> {
+  private static class TestEventSource extends EventSource<Integer> {
 
     private Consumer<Integer> consumer;
 

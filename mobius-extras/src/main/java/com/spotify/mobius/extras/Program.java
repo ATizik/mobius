@@ -55,7 +55,7 @@ public abstract class Program<M, E, F> {
 
   /** @return a {@link MobiusLoop.Builder} based on this program */
   public MobiusLoop.Builder<M, E, F> createLoop() {
-    MobiusLoop.Builder<M, E, F> builder = Mobius.loop(update(), effectHandler());
+    MobiusLoop.Builder<M, E, F> builder = Mobius.INSTANCE.loop(update(), effectHandler());
 
     Init<M, F> init = init();
     if (init != null) {

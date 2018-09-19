@@ -19,8 +19,7 @@
  */
 package com.spotify.mobius.test;
 
-import static com.spotify.mobius.Effects.effects;
-import static com.spotify.mobius.First.first;
+
 import static com.spotify.mobius.test.FirstMatchers.hasEffects;
 import static com.spotify.mobius.test.FirstMatchers.hasModel;
 import static com.spotify.mobius.test.FirstMatchers.hasNoEffects;
@@ -31,6 +30,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.spotify.mobius.First;
+import com.spotify.mobius.Next;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.StringDescription;
@@ -50,7 +50,7 @@ public class FirstMatchersTest {
 
   @Test
   public void testHasModelSpecific() throws Exception {
-    first = first("a");
+    first = First.Companion.first("a");
     matcher = hasModel(equalTo("a"));
 
     assertTrue(matcher.matches(first));
@@ -62,7 +62,7 @@ public class FirstMatchersTest {
 
   @Test
   public void testHasModelWithValue() throws Exception {
-    first = first("a");
+    first = First.Companion.first("a");
     matcher = hasModel("a");
 
     assertTrue(matcher.matches(first));
@@ -74,7 +74,7 @@ public class FirstMatchersTest {
 
   @Test
   public void testHasModelSpecificButWrong() throws Exception {
-    first = first("b");
+    first = First.Companion.first("b");
     matcher = hasModel(equalTo("a"));
 
     assertFalse(matcher.matches(first));
@@ -86,7 +86,7 @@ public class FirstMatchersTest {
 
   @Test
   public void testHasNoEffectsMatch() throws Exception {
-    first = first("a");
+    first = First.Companion.first("a");
     matcher = hasNoEffects();
 
     assertTrue(matcher.matches(first));
@@ -98,7 +98,7 @@ public class FirstMatchersTest {
 
   @Test
   public void testHasNoEffectsMismatch() throws Exception {
-    first = first("a", effects(1, 2, 3));
+    first = First.Companion.first("a", Next.Companion.effects(1, 2, 3));
     matcher = hasNoEffects();
 
     assertFalse(matcher.matches(first));
@@ -110,7 +110,7 @@ public class FirstMatchersTest {
 
   @Test
   public void testHasEffectsSpecific() throws Exception {
-    first = first("a", effects(1, 3, 2));
+    first = First.Companion.first("a", Next.Companion.effects(1, 3, 2));
     matcher = hasEffects(hasItems(1, 2, 3));
 
     assertTrue(matcher.matches(first));
@@ -122,7 +122,7 @@ public class FirstMatchersTest {
 
   @Test
   public void testHasEffectsSpecificButWrong() throws Exception {
-    first = first("a", effects(1));
+    first = First.Companion.first("a", Next.Companion.effects(1));
     matcher = hasEffects(hasItems(2));
 
     assertFalse(matcher.matches(first));
@@ -134,7 +134,7 @@ public class FirstMatchersTest {
 
   @Test
   public void testHasEffectsSpecificButMissing() throws Exception {
-    first = first("a");
+    first = First.Companion.first("a");
     matcher = hasEffects(hasItems(1, 2, 3));
 
     assertFalse(matcher.matches(first));
@@ -146,7 +146,7 @@ public class FirstMatchersTest {
 
   @Test
   public void testHasEffectsWithConcreteInstancesMatch() throws Exception {
-    first = first("a", effects(94));
+    first = First.Companion.first("a", Next.Companion.effects(94));
 
     matcher = hasEffects(94);
 
@@ -155,7 +155,7 @@ public class FirstMatchersTest {
 
   @Test
   public void testHasEffectsWithConcreteInstancesMismatch() throws Exception {
-    first = first("a", effects(94));
+    first = First.Companion.first("a", Next.Companion.effects(94));
 
     matcher = hasEffects(74);
 
@@ -164,7 +164,7 @@ public class FirstMatchersTest {
 
   @Test
   public void testHasEffectsWithConcreteInstancesPartialMatch() throws Exception {
-    first = first("a", effects(94, 74));
+    first = First.Companion.first("a", Next.Companion.effects(94, 74));
 
     matcher = hasEffects(94);
 
@@ -173,7 +173,7 @@ public class FirstMatchersTest {
 
   @Test
   public void testHasEffectsWithConcreteInstancesOutOfOrder() throws Exception {
-    first = first("a", effects(94, 74, 65));
+    first = First.Companion.first("a", Next.Companion.effects(94, 74, 65));
 
     matcher = hasEffects(65, 94, 74);
 

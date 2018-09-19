@@ -19,7 +19,7 @@
  */
 package com.spotify.mobius.test;
 
-import static com.spotify.mobius.internal_util.Preconditions.checkNotNull;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import com.spotify.mobius.Next;
@@ -27,6 +27,8 @@ import com.spotify.mobius.Update;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import com.spotify.mobius.internal_util.PreconditionsKt;
 import org.hamcrest.Matcher;
 
 /**
@@ -41,7 +43,7 @@ public class UpdateSpec<M, E, F> {
   private final Update<M, E, F> update;
 
   public UpdateSpec(Update<M, E, F> update) {
-    this.update = checkNotNull(update);
+    this.update = PreconditionsKt.checkNotNull(update);
   }
 
   public When given(M model) {
@@ -53,7 +55,7 @@ public class UpdateSpec<M, E, F> {
     private final M model;
 
     private When(M model) {
-      this.model = checkNotNull(model);
+      this.model = PreconditionsKt.checkNotNull(model);
     }
 
     /**
@@ -157,7 +159,7 @@ public class UpdateSpec<M, E, F> {
 
     @SafeVarargs
     private ThenImpl(M model, E event, E... events) {
-      this.model = checkNotNull(model);
+      this.model = PreconditionsKt.checkNotNull(model);
       this.events = new ArrayList<>(events.length + 1);
       this.events.add(event);
       this.events.addAll(Arrays.asList(events));
@@ -173,7 +175,7 @@ public class UpdateSpec<M, E, F> {
         lastModel = last.modelOrElse(lastModel);
       }
 
-      assertion.apply(Result.of(lastModel, checkNotNull(last)));
+      assertion.apply(Result.of(lastModel, PreconditionsKt.checkNotNull(last)));
     }
 
     @Override

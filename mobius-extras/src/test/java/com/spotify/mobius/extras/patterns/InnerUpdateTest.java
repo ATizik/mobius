@@ -38,7 +38,7 @@ public class InnerUpdateTest {
         InnerUpdate.<String, String, String, String, String, String>builder()
             .modelExtractor(m -> "extracted_model")
             .eventExtractor(e -> e)
-            .innerUpdate((model, event) -> Next.next(model))
+            .innerUpdate((model, event) -> Next.Companion.next(model))
             .modelUpdater((m, mi) -> mi)
             .innerEffectHandler(ignoreEffects())
             .build();
@@ -54,7 +54,7 @@ public class InnerUpdateTest {
         InnerUpdate.<String, String, String, String, String, String>builder()
             .modelExtractor(m -> m)
             .eventExtractor(e -> "extracted_event")
-            .innerUpdate((model, event) -> Next.next(event))
+            .innerUpdate((model, event) -> Next.Companion.next(event))
             .modelUpdater((m, mi) -> mi)
             .innerEffectHandler(ignoreEffects())
             .build();
@@ -70,7 +70,7 @@ public class InnerUpdateTest {
         InnerUpdate.<String, String, String, String, String, String>builder()
             .modelExtractor(m -> null)
             .eventExtractor(e -> e)
-            .innerUpdate((model, event) -> Next.next(model))
+            .innerUpdate((model, event) -> Next.Companion.next(model))
             .modelUpdater((m, mi) -> mi)
             .innerEffectHandler(ignoreEffects())
             .build();
@@ -89,7 +89,7 @@ public class InnerUpdateTest {
         InnerUpdate.<String, String, String, String, String, String>builder()
             .modelExtractor(m -> m)
             .eventExtractor(e -> null)
-            .innerUpdate((model, event) -> Next.next(model))
+            .innerUpdate((model, event) -> Next.Companion.next(model))
             .modelUpdater((m, mi) -> mi)
             .innerEffectHandler(ignoreEffects())
             .build();
@@ -108,7 +108,7 @@ public class InnerUpdateTest {
         InnerUpdate.<String, String, String, String, String, String>builder()
             .modelExtractor(m -> m)
             .eventExtractor(e -> e)
-            .innerUpdate((model, event) -> Next.next("inner_update"))
+            .innerUpdate((model, event) -> Next.Companion.next("inner_update"))
             .modelUpdater((m, mi) -> mi)
             .innerEffectHandler(ignoreEffects())
             .build();
@@ -143,7 +143,7 @@ public class InnerUpdateTest {
         InnerUpdate.<String, String, String, String, String, String>builder()
             .modelExtractor(m -> m)
             .eventExtractor(e -> e)
-            .innerUpdate((model, event) -> noChange())
+            .innerUpdate((model, event) -> Companion.noChange())
             .modelUpdater((m, mi) -> "model_updater")
             .innerEffectHandler(ignoreEffects())
             .build();
@@ -159,7 +159,7 @@ public class InnerUpdateTest {
         InnerUpdate.<String, String, String, String, String, String>builder()
             .modelExtractor(m -> m)
             .eventExtractor(e -> e)
-            .innerUpdate((model, event) -> Next.next("inner_update"))
+            .innerUpdate((model, event) -> Next.Companion.next("inner_update"))
             .modelUpdater((m, mi) -> "model_updater")
             .innerEffectHandler(ignoreEffects())
             .build();
@@ -175,9 +175,9 @@ public class InnerUpdateTest {
         InnerUpdate.<String, String, String, String, String, String>builder()
             .modelExtractor(m -> m)
             .eventExtractor(e -> e)
-            .innerUpdate((model, event) -> dispatch(effects("1", "2", "3")))
+            .innerUpdate((model, event) -> Companion.dispatch(effects("1", "2", "3")))
             .modelUpdater((m, mi) -> mi)
-            .innerEffectHandler((model, updated, effects) -> Next.next("effect_handler"))
+            .innerEffectHandler((model, updated, effects) -> Next.Companion.next("effect_handler"))
             .build();
 
     Next<String, String> next = innerUpdate.update("model", "event");
@@ -191,9 +191,9 @@ public class InnerUpdateTest {
         InnerUpdate.<String, String, String, String, String, String>builder()
             .modelExtractor(m -> m)
             .eventExtractor(e -> e)
-            .innerUpdate((model, event) -> Next.next("inner_update"))
+            .innerUpdate((model, event) -> Next.Companion.next("inner_update"))
             .modelUpdater((m, mi) -> mi)
-            .innerEffectHandler((model, updated, effects) -> Next.next("effect_handler"))
+            .innerEffectHandler((model, updated, effects) -> Next.Companion.next("effect_handler"))
             .build();
 
     Next<String, String> next = innerUpdate.update("model", "event");
@@ -208,9 +208,9 @@ public class InnerUpdateTest {
         InnerUpdate.<String, String, String, String, String, String>builder()
             .modelExtractor(m -> m)
             .eventExtractor(e -> e)
-            .innerUpdate((model, event) -> noChange())
+            .innerUpdate((model, event) -> Companion.noChange())
             .modelUpdater((m, mi) -> mi)
-            .innerEffectHandler((model, updated, effects) -> Next.next("effect_handler"))
+            .innerEffectHandler((model, updated, effects) -> Next.Companion.next("effect_handler"))
             .build();
 
     Next<String, String> next = innerUpdate.update("model", "event");
@@ -225,9 +225,9 @@ public class InnerUpdateTest {
         InnerUpdate.<String, String, String, String, String, String>builder()
             .modelExtractor(m -> m)
             .eventExtractor(e -> e)
-            .innerUpdate((model, event) -> Next.next("inner_update"))
+            .innerUpdate((model, event) -> Next.Companion.next("inner_update"))
             .modelUpdater((m, mi) -> mi)
-            .innerEffectHandler((model, updated, effects) -> Next.next("effect_handler"))
+            .innerEffectHandler((model, updated, effects) -> Next.Companion.next("effect_handler"))
             .build();
 
     Next<String, String> next = innerUpdate.update("model", "event");

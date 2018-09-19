@@ -32,7 +32,7 @@ public class CompositeDisposableTest {
     TestDisposable two = new TestDisposable();
     TestDisposable three = new TestDisposable();
 
-    Disposable composite = CompositeDisposable.from(one, two, three);
+    Disposable composite = CompositeDisposable.Companion.from(one, two, three);
 
     composite.dispose();
 
@@ -52,7 +52,7 @@ public class CompositeDisposableTest {
 
     Disposable[] disposables = new Disposable[] {one, two, three};
 
-    Disposable composite = CompositeDisposable.from(disposables);
+    Disposable composite = CompositeDisposable.Companion.from(disposables);
 
     disposables[0] = four;
     disposables[1] = five;
