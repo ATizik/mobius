@@ -20,10 +20,6 @@
 package com.spotify.mobius.runners
 
 import kotlinx.coroutines.experimental.*
-import kotlinx.coroutines.experimental.timeunit.TimeUnit
-
-
-import kotlin.coroutines.experimental.CoroutineContext
 
 /** A [WorkRunner] implementation that is backed by an [ExecutorService].  */
 class ExecutorServiceWorkRunner() : WorkRunner {
@@ -56,14 +52,3 @@ class ExecutorServiceWorkRunner() : WorkRunner {
     }
 }
 
-class CoroutineWorkRunner(private val coroutineContext: CoroutineDispatcher, val job: Job):WorkRunner {
-
-    override fun post(runnable: Runnable) {
-        coroutineContext.dispatch(job,runnable)
-    }
-
-    override fun dispose() {
-        job.cancel()
-    }
-
-}

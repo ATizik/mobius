@@ -46,8 +46,8 @@ class MobiusLoop<M:Any, E : Any, F: Any> private constructor(
     private val eventDispatcher: MessageDispatcher<E>
     private val effectDispatcher: MessageDispatcher<F>
 
-    private val eventProcessor: EventProcessor<M, E, F>
-    private val effectConsumer: Connection<F>
+    private lateinit var eventProcessor: EventProcessor<M, E, F>
+    private lateinit var effectConsumer: Connection<F>
     private val eventSourceDisposable: Disposable
 
     private val modelObservers = mutableListOf<Consumer<M>>()//TODO: Synchronize this list
@@ -67,8 +67,7 @@ class MobiusLoop<M:Any, E : Any, F: Any> private constructor(
             }
         }
 
-        this.effectConsumer = effectHandler.connect(eventConsumer)
-        this.eventSourceDisposable = eventSource.subscribe(eventConsumer)
+
         val onEffectReceived = object : Consumer<F> {
             override fun accept(effect: F) {
                 try {
@@ -89,9 +88,6 @@ class MobiusLoop<M:Any, E : Any, F: Any> private constructor(
                 }
             }
         }
-        this.effectDispatcher = MessageDispatcher(effectRunner, onEffectReceived)
-
-        this.eventProcessor = eventProcessorFactory.create(effectDispatcher, onModelChanged)
 
         val onEventReceived = object : Consumer<E> {
             override fun accept(event: E) {
@@ -104,6 +100,15 @@ class MobiusLoop<M:Any, E : Any, F: Any> private constructor(
 
 
         this.eventDispatcher = MessageDispatcher(eventRunner, onEventReceived)
+        this.effectDispatcher = MessageDispatcher(effectRunner, onEffectReceived)
+
+        this.eventProcessor = eventProcessorFactory.create(effectDispatcher, onModelChanged)
+
+        this.effectConsumer = effectHandler.connect(eventConsumer)
+        this.eventSourceDisposable = eventSource.subscribe(eventConsumer)
+
+
+
 
         eventRunner.post (Runnable { eventProcessor.init() })
     }
@@ -368,7 +373,7 @@ class MobiusLoop<M:Any, E : Any, F: Any> private constructor(
 
     companion object {
 
-        internal fun <M:Any, E:Any, F:Any> create(
+        fun <M:Any, E:Any, F:Any> create(
                 store: MobiusStore<M, E, F>,
                 effectHandler: Connectable<F, E>,
                 eventSource: EventSource<E>,

@@ -19,7 +19,7 @@
  */
 package com.spotify.mobius;
 
-import static com.spotify.mobius.Effects.effects;
+
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.core.Is.is;
@@ -48,7 +48,7 @@ public class MobiusTest {
         @Nonnull
         @Override
         public Next<String, Boolean> update(String model, Integer event) {
-          return Next.Companion.next(model + String.valueOf(event), effects((Boolean) (event % 2 == 0)));
+          return Next.Companion.next(model + String.valueOf(event), Next.Companion.<Boolean>effects((Boolean) (event % 2 == 0)));
         }
       };
 
@@ -86,7 +86,7 @@ public class MobiusTest {
           @Nonnull
           @Override
           public First<String, Boolean> init(String model) {
-            return First.Companion.first(model, effects(true));
+            return First.Companion.first(model, Next.Companion.<Boolean>effects(true));
           }
         };
 

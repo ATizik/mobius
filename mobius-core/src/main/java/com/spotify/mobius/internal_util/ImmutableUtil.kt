@@ -35,7 +35,7 @@ object ImmutableUtil {
     fun <T> setOf(vararg items: T): Set<T> {
         checkArrayNoNulls(items)
 
-        return setOf(*items)
+        return kotlin.collections.setOf(*items)
     }
 
     fun <T> immutableSet(set: Set<T>): Set<T> {
@@ -50,4 +50,6 @@ object ImmutableUtil {
 
         return sets.flatMap { checkIterableNoNulls(it) }.toSet()
     }
+
+
 }

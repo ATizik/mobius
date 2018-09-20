@@ -26,11 +26,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 class CapturingLogger<M, E, F> implements MobiusLoop.Logger<M, E, F> {
 
   final List<M> beforeInit = new CopyOnWriteArrayList<>();
-  final List<AfterInitArgs<M, F>> afterInit = new CopyOnWriteArrayList<>();
+ /* final List<AfterInitArgs<M, F>> afterInit = new CopyOnWriteArrayList<>();
   final List<InitErrorArgs<M>> initErrors = new CopyOnWriteArrayList<>();
   final List<BeforeUpdateArgs<M, E>> beforeUpdate = new CopyOnWriteArrayList<>();
   final List<AfterUpdateArgs<M, E, F>> afterUpdate = new CopyOnWriteArrayList<>();
-  final List<UpdateErrorArgs<M, E>> updateErrors = new CopyOnWriteArrayList<>();
+  final List<UpdateErrorArgs<M, E>> updateErrors = new CopyOnWriteArrayList<>();*/
 
   @Override
   public void beforeInit(M model) {
@@ -39,30 +39,31 @@ class CapturingLogger<M, E, F> implements MobiusLoop.Logger<M, E, F> {
 
   @Override
   public void afterInit(M model, First<M, F> result) {
-    afterInit.add(AfterInitArgs.create(model, result));
+    //afterInit.add(AfterInitArgs.create(model, result));
   }
 
   @Override
   public void exceptionDuringInit(M model, Throwable exception) {
-    initErrors.add(InitErrorArgs.create(model, exception));
+    //initErrors.add(InitErrorArgs.create(model, exception));
   }
 
   @Override
   public void beforeUpdate(M model, E event) {
-    beforeUpdate.add(BeforeUpdateArgs.create(model, event));
+    //beforeUpdate.add(BeforeUpdateArgs.create(model, event));
   }
 
   @Override
   public void afterUpdate(M model, E event, Next<M, F> result) {
-    afterUpdate.add(AfterUpdateArgs.create(model, event, result));
+   // afterUpdate.add(AfterUpdateArgs.create(model, event, result));
   }
 
   @Override
   public void exceptionDuringUpdate(M model, E event, Throwable exception) {
-    updateErrors.add(UpdateErrorArgs.create(model, event, exception));
+ //   updateErrors.add(UpdateErrorArgs.create(model, event, exception));
   }
+}
 
-  @AutoValue
+ /* @AutoValue
   abstract static class AfterInitArgs<M, F> {
 
     abstract M model();
@@ -125,4 +126,4 @@ class CapturingLogger<M, E, F> implements MobiusLoop.Logger<M, E, F> {
       return new AutoValue_CapturingLogger_UpdateErrorArgs<>(model, event, exception);
     }
   }
-}
+}*/

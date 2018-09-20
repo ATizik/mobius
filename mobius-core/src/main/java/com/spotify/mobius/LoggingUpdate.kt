@@ -22,7 +22,7 @@ package com.spotify.mobius
 
 import com.spotify.mobius.internal_util.Throwables
 
-internal class LoggingUpdate<M:Any, E:Any, F>(actualUpdate: Update<M, E, F>, logger: MobiusLoop.Logger<M, E, F>) : Update<M, E, F> {
+class LoggingUpdate<M:Any, E:Any, F>(actualUpdate: Update<M, E, F>, logger: MobiusLoop.Logger<M, E, F>) : Update<M, E, F> {
 
     private val actualUpdate: Update<M, E, F> = checkNotNull(actualUpdate)
     private val logger: MobiusLoop.Logger<M, E, F> = checkNotNull(logger)

@@ -19,8 +19,7 @@
  */
 package com.spotify.mobius.internal_util;
 
-import static com.spotify.mobius.internal_util.ImmutableUtil.setOf;
-import static com.spotify.mobius.internal_util.ImmutableUtil.unionSets;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
@@ -31,7 +30,7 @@ public class ImmutableUtilTest {
   @Test
   public void shouldMergeSetsCorrectly() throws Exception {
     assertThat(
-        unionSets(Sets.newHashSet("e1", "e2"), setOf("e3", "e4")),
-        equalTo(setOf("e1", "e2", "e3", "e4")));
+        ImmutableUtil.INSTANCE.unionSets(Sets.newHashSet("e1", "e2"),  ImmutableUtil.INSTANCE.setOf("e3", "e4")),
+        equalTo( ImmutableUtil.INSTANCE.setOf("e1", "e2", "e3", "e4")));
   }
 }

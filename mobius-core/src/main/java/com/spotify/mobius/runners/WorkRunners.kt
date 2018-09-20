@@ -21,8 +21,7 @@ package com.spotify.mobius.runners
 
 
 
-import kotlinx.coroutines.experimental.CoroutineDispatcher
-import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.*
 
 /**
  * Interface for posting runnables to be executed on a thread. The runnables must all be executed on
@@ -34,19 +33,22 @@ object WorkRunners {
         return ImmediateWorkRunner()
     }
 
-    /*fun singleThread(): WorkRunner {
-        return from(Executors.newSingleThreadExecutor())
+    fun sequential(): WorkRunner {
+        val job = Job()
+
+
+        return from(job, 1)
     }
 
-    fun fixedThreadPool(n: Int): WorkRunner {
-        return from(Executors.newFixedThreadPool(n))
+    fun cachedFixedPool(capacity: Int = 8): WorkRunner {
+        val job = Job()
+
+        return from(job,8)
     }
 
-    fun cachedThreadPool(): WorkRunner {
-        return from(Executors.newCachedThreadPool())
-    }*/
 
-    fun from(coroutineScope: CoroutineDispatcher, job: Job): WorkRunner {
-        return CoroutineWorkRunner(coroutineScope,job)
+    fun from(job: Job, capacity: Int): WorkRunner {
+        return CoroutineWorkRunner(job, capacity)
     }
 }
+

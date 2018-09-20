@@ -40,13 +40,13 @@ import org.junit.rules.ExpectedException;
 
 public class ExecutorServiceWorkRunnerTest {
 
-  private ExecutorServiceWorkRunner underTest;
+  private WorkRunner underTest;
 
   @Rule public final ExpectedException thrown = ExpectedException.none();
 
   @Before
   public void setUp() throws Exception {
-    underTest = new ExecutorServiceWorkRunner(Executors.newSingleThreadExecutor());
+    underTest = WorkRunners.INSTANCE.sequential();
   }
 
   @Test
@@ -69,8 +69,8 @@ public class ExecutorServiceWorkRunnerTest {
           }
         });
 
-    ExecutorServiceWorkRunner backgroundWorkRunner =
-        new ExecutorServiceWorkRunner(Executors.newSingleThreadExecutor());
+      WorkRunner backgroundWorkRunner =
+        WorkRunners.INSTANCE.sequential();
     backgroundWorkRunner.post(
         new Runnable() {
           @Override
@@ -90,24 +90,22 @@ public class ExecutorServiceWorkRunnerTest {
     assertThat(output, equalTo(asList(1, 2, 3, 4)));
   }
 
-  @Test
+  @Test //This test probably doesn't make sense in kotlin common
   public void disposingShouldStopUnderlyingExecutorService() throws Exception {
-    ExecutorService service = Executors.newSingleThreadExecutor();
-
-    underTest = new ExecutorServiceWorkRunner(service);
+    /*underTest = WorkRunners.INSTANCE.singleThread();
     underTest.dispose();
 
-    assertThat(service.isTerminated(), is(true));
+    assertThat(service.isTerminated(), is(true));*/
   }
 
   @Test
   public void tasksShouldBeRejectedAfterDispose() throws Exception {
-    ExecutorService service = Executors.newSingleThreadExecutor();
 
-    underTest = new ExecutorServiceWorkRunner(service);
+
+    underTest = WorkRunners.INSTANCE.sequential();
     underTest.dispose();
 
-    thrown.expect(RejectedExecutionException.class);
+    thrown.expect(IllegalStateException.class);
 
     underTest.post(
         new Runnable() {

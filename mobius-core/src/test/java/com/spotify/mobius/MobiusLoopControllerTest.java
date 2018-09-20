@@ -360,7 +360,7 @@ public class MobiusLoopControllerTest {
                 //noinspection ConstantConditions
                 underTest.connect(eventConsumer -> null);
               })
-          .isInstanceOf(NullPointerException.class);
+          .isInstanceOf(IllegalStateException.class);
     }
 
     @Test

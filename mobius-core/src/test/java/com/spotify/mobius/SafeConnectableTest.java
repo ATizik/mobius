@@ -72,12 +72,12 @@ public class SafeConnectableTest {
   @Test
   public void nullActualThrowsNPE() throws Exception {
     assertThatThrownBy(() -> new SafeConnectable<Integer, String>(null))
-        .isInstanceOf(NullPointerException.class);
+        .isInstanceOf(IllegalArgumentException.class);
   }
 
   @Test
   public void nullConsumerInConnectThrowsNPE() throws Exception {
-    assertThatThrownBy(() -> underTest.connect(null)).isInstanceOf(NullPointerException.class);
+    assertThatThrownBy(() -> underTest.connect(null)).isInstanceOf(IllegalArgumentException.class);
   }
 
   @Test
@@ -94,7 +94,7 @@ public class SafeConnectableTest {
             });
 
     assertThatThrownBy(() -> underTest.connect(recordingConsumer))
-        .isInstanceOf(NullPointerException.class);
+        .isInstanceOf(IllegalStateException.class);
   }
 
   @Test

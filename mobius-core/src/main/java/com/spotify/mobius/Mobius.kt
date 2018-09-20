@@ -27,6 +27,7 @@ import com.spotify.mobius.functions.Producer
 import com.spotify.mobius.runners.WorkRunner
 import com.spotify.mobius.runners.WorkRunners
 import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.channels.consumeEach
 import kotlin.coroutines.experimental.CoroutineContext
 
 object Mobius {
@@ -104,27 +105,12 @@ object Mobius {
                 NOOP_LOGGER as MobiusLoop.Logger<M, E, F>,
                 object : Producer<WorkRunner> {
                     override fun get(): WorkRunner {
-                        val job = Job()
-                        val list = mutableListOf<Runnable>()
-                        return WorkRunners.from(object :CoroutineDispatcher() {
-                            init {
-                                (job as CoroutineScope).launch {
-                                    while (job.isActive) {
-                                        job.joinChildren()
-                                        list.removeAt(1).run()
-                                    }
-                                }
-                            }
-                            override fun dispatch(context: CoroutineContext, block: Runnable) {
-                                list+=block
-                            }
-                        },job)//Executors.newSingleThreadExecutor(Builder.THREAD_FACTORY))
+                        return WorkRunners.sequential()
                     }
                 },
                 object : Producer<WorkRunner> {
-                    val job = Job()
                     override fun get(): WorkRunner {
-                        return WorkRunners.from(Dispatchers.Default, job)
+                        return WorkRunners.cachedFixedPool()//TODO: fixed pool
                     }
                 })
     }

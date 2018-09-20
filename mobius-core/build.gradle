@@ -11,7 +11,7 @@ dependencies {
 
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.26.0"
-    //testImplementation project(':mobius-test')
+    testImplementation project(':mobius-test')
     testImplementation "junit:junit:${versions.junit}"
     testImplementation "ch.qos.logback:logback-classic:${versions.logback}"
     testImplementation "com.google.guava:guava:${versions.guava}"
@@ -78,4 +78,6 @@ buildscript {
 repositories {
     mavenCentral()
 }
+targetCompatibility = 1.8
+sourceCompatibility = 1.8
 
